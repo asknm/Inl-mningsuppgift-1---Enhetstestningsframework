@@ -30,10 +30,11 @@ public class MyUnitTester implements ActionListener {
 
         // Text Area at the Center
         textArea = new JTextArea();
+        JScrollPane scrollPane = new JScrollPane(textArea);
 
         frame.getContentPane().add(BorderLayout.NORTH, northPanel);
         frame.getContentPane().add(BorderLayout.SOUTH, southPanel);
-        frame.getContentPane().add(BorderLayout.CENTER, textArea);
+        frame.getContentPane().add(BorderLayout.CENTER, scrollPane);
         frame.setVisible(true);
 
     }

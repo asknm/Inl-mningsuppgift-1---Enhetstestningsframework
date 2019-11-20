@@ -12,6 +12,7 @@ public class MyUnitTester implements ActionListener {
     private JTextArea textArea;
 
     public MyUnitTester() {
+        //The UI element are setup here in the constructor
         JFrame frame = new JFrame("MyUnitTester");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(1024, 768);
@@ -41,6 +42,8 @@ public class MyUnitTester implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent actionEvent) {
+        //This method is called when a button is clicked
+        //Tests to determine which button was clicked
         String action = actionEvent.getActionCommand();
         if (action.equals("Run tests")) {
             textArea.setText("");
@@ -63,12 +66,13 @@ public class MyUnitTester implements ActionListener {
             @Override
             protected String doInBackground() throws Exception
             {
-                Class c;
+                //What is done when the SwingWorker is executed
+                Class class;
                 Object obj;
                 try {
-                    c = Class.forName(testTextField.getText());
-                    if (TestClass.class.isAssignableFrom(c)) {
-                        obj = c.getDeclaredConstructor().newInstance();
+                    class = Class.forName(testTextField.getText());
+                    if (TestClass.class.isAssignableFrom(class)) {
+                        obj = class.getDeclaredConstructor().newInstance();
                     }
                     else {
                         textArea.append("Class does not implement TestClass \n");
@@ -79,9 +83,9 @@ public class MyUnitTester implements ActionListener {
                     return "Fail";
                 }
 
-                Method setup = c.getDeclaredMethod("setUp");
-                Method teardown = c.getDeclaredMethod("tearDown");
-                Method[] methods = c.getMethods();
+                Method setup = class.getDeclaredMethod("setUp");
+                Method teardown = class.getDeclaredMethod("tearDown");
+                Method[] methods = class.getMethods();
                 for (Method method : methods) {
                     if (method.getName().startsWith("test") && method.getParameterCount() == 0 && (method.getReturnType() == boolean.class)) {
                         textArea.append(method.getName() + ": ");
@@ -98,6 +102,7 @@ public class MyUnitTester implements ActionListener {
                                 fails++;
                             }
                         } catch (Exception e) {
+                            //Catches exception if one is thrown by the invoked test method
                             textArea.append("FAIL Generated a " + e.getCause().toString() + "\n");
                             exceptions++;
                         }
@@ -109,6 +114,7 @@ public class MyUnitTester implements ActionListener {
             @Override
             protected void done()
             {
+                //What is done when the SwingWorker is done
                 textArea.append("\n");
                 textArea.append(String.valueOf(successes) + " tests succeeded \n");
                 textArea.append(String.valueOf(fails) + " tests failed \n");
@@ -117,6 +123,7 @@ public class MyUnitTester implements ActionListener {
 
         };
 
+        //Executes the SwingWorker defined above
         sw1.execute();
     }
 
